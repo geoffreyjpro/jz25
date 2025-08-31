@@ -38,10 +38,13 @@ fun todaysDate(): String {
     return now.toLocalDateTime(zone).format()
 }
 
+@Composable
+expect fun CheckPermissions()
 
 @Composable
 @Preview
 fun App() {
+    CheckPermissions()
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
