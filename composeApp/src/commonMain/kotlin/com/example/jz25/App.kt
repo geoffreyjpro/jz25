@@ -22,6 +22,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import jz25.composeapp.generated.resources.Res
 import jz25.composeapp.generated.resources.compose_multiplatform
+import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -43,6 +44,8 @@ fun todaysDate(): String {
 fun App() {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
+        val scope = rememberCoroutineScope()
+        val chuck = remember { mutableStateOf(ChuckNorris("", "")) }
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primaryContainer)
@@ -59,6 +62,10 @@ fun App() {
 
             Button(onClick = { showContent = !showContent }) {
                 Text("Click me!")
+                scope.launch {
+                    chuck.value = Greeting().sayHelloFromChuck()
+                }
+
             }
             AnimatedVisibility(showContent) {
                 val greeting = remember { Greeting().greet() }
@@ -67,7 +74,8 @@ fun App() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+//                    Text("Compose: $greeting")
+                    Text("JZ25: ${chuck.value.value}")
                 }
             }
         }
